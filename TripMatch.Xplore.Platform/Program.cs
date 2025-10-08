@@ -44,6 +44,9 @@ using TripMatch.Xplore.Platform.Shared.Infrastructure.Interfaces.ASP.Configurati
 using TripMatch.Xplore.Platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
 using TripMatch.Xplore.Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
 using TripMatch.Xplore.Platform.Shared.Infrastructure.Persistence.EFC.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,13 +108,20 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // CORS Policy
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllPolicy",
-        policy => policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("https://trip-match-2025.web.app", 
+                    "http://localhost:5173",          
+                    "http://localhost:8080")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
 });
 
 
@@ -168,6 +178,27 @@ builder.Services.AddCortexMediator(
     handlerAssemblyMarkerTypes: new[] { typeof(Program) }, configure: options =>
     {
         options.AddOpenCommandPipelineBehavior(typeof(LoggingCommandBehavior<>));
+    });
+
+// JWT Authentication configuration
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
     });
 
 var app = builder.Build();
