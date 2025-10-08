@@ -1,0 +1,18 @@
+# Build folders
+bin/
+obj/
+
+# IDE folders
+.idea/
+.vs/
+
+# User-specific files
+*.user
+*.suo
+
+# Logs and databases
+*.log
+*.db
+
+# Other
+/packages/

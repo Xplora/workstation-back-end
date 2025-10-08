@@ -1,0 +1,6 @@
+@TripMatch.Xplore.Platform_HostAddress = http://localhost:5298
+
+GET {{TripMatch.Xplore.Platform_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

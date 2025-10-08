@@ -1,0 +1,9 @@
+﻿namespace TripMatch.Xplore.Platform.Inquiry.Domain.Models.Commands;
+
+public class CreateInquiryCommand
+{
+    public int ExperienceId { get; set; }
+    public Guid UserId { get; set; }
+    public string Question { get; set; } = null!;
+    public DateTime AskedAt { get; set; }
+}
