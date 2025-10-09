@@ -11,6 +11,7 @@ public class ExperienceRepository(AppDbContext context) : BaseRepository<Experie
         return await Context.Set<Experience>()
             .Include(e => e.Agency)
             .Include(e => e.ExperienceImages)
+            .Include(e => e.Category)
             .Include(e => e.Includes)
             .Include(e => e.Schedules)
             .Include(e => e.Agency)
@@ -27,6 +28,7 @@ public class ExperienceRepository(AppDbContext context) : BaseRepository<Experie
             .Include(e => e.ExperienceImages)
             .Include(e => e.Includes)
             .Include(e => e.Schedules)
+            .Include(e => e.Category)
             .ToListAsync();
     }
     
@@ -35,6 +37,7 @@ public class ExperienceRepository(AppDbContext context) : BaseRepository<Experie
         return await Context.Set<Experience>()
             .Include(e => e.Schedules)
             .Include(e => e.Agency)
+            .Include(e => e.Category)
             .Include(e => e.ExperienceImages)
             .Include(e => e.Includes)
             .FirstOrDefaultAsync(e => e.Id == id);
@@ -43,9 +46,11 @@ public class ExperienceRepository(AppDbContext context) : BaseRepository<Experie
     public async Task<IEnumerable<Experience>> FindByAgencyUserIdAsync(Guid agencyUserId)
     {
         return await Context.Set<Experience>()
-            .Where(e => e.AgencyUserId == agencyUserId && e.IsActive) // Se añadió el filtro IsActive
-            .Include(e => e.ExperienceImages) // Incluir datos relacionados
+            .Where(e => e.AgencyUserId == agencyUserId && e.IsActive) 
+            .Include(e => e.ExperienceImages) 
+            .Include(e => e.Agency) 
             .Include(e => e.Includes)
+            .Include(e => e.Category)
             .Include(e => e.Schedules)
             .ToListAsync();
     }
