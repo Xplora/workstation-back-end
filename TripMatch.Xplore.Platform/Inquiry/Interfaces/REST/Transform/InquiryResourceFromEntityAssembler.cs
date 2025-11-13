@@ -10,7 +10,12 @@ public class InquiryResourceFromEntityAssembler
             entity.Id,
             entity.ExperienceId,
             entity.UserId,
+            entity.User?.FirstName ?? "Unknown Traveler",
+            entity.Experience?.Title ?? "Unknown Experience",
             entity.Question,
-            entity.AskedAt);
+            entity.Response?.Answer,
+            entity.AskedAt,
+            entity.Response != null
+        );
     }
 }

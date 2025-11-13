@@ -13,6 +13,8 @@ public class ResponseRepository : BaseRepository<Response>, IResponseRepository
     public async Task<Response?> FindByInquiryIdAsync(int inquiryId)
     {
         return await Context.Set<Response>()
+            .Include(r => r.Inquiry)               
+            .ThenInclude(i => i.Experience)     
             .FirstOrDefaultAsync(r => r.InquiryId == inquiryId);
     }
 }

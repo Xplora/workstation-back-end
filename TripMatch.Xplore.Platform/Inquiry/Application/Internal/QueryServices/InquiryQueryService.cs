@@ -10,13 +10,19 @@ public class InquiryQueryService : IInquiryQueryService
 
     public InquiryQueryService(IInquiryRepository repo) => _repository = repo;
 
-    public async Task<IEnumerable<TripMatch.Xplore.Platform.Inquiry.Domain.Models.Entities.Inquiry>> Handle(GetAllInquiriesQuery query)
+    public async Task<IEnumerable<Domain.Models.Entities.Inquiry>> Handle(GetAllInquiriesQuery query)
     {
-        return await _repository.ListAsync();
+        return await _repository.ListWithResponsesAsync();
     }
 
     public async Task<IEnumerable<TripMatch.Xplore.Platform.Inquiry.Domain.Models.Entities.Inquiry>> Handle(GetAllInquiriesByExperienceQuery query)
     {
         return await _repository.FindByExperienceIdAsync(query.ExperienceId);
     }    
+    
+    public async Task<IEnumerable<TripMatch.Xplore.Platform.Inquiry.Domain.Models.Entities.Inquiry>> HandleByAgency(GetAllInquiriesByAgencyQuery query)
+    {
+        return await _repository.FindByAgencyIdAsync(query.AgencyId);
+    }
+    
 }

@@ -55,6 +55,22 @@ public class InquiryController : ControllerBase
         var resources = result.Select(InquiryResourceFromEntityAssembler.ToResourceFromEntity);
         return resources.Any() ? Ok(resources) : NotFound($"No inquiries found for experience {experienceId}.");
     }
+    
+    /// <summary>
+    /// Retrieves all inquiries related to experiences owned by a specific agency.
+    /// </summary>
+    /// <param name="agencyId">ID of the agency</param>
+    /// <response code="200">Returns inquiries for the specified agency</response>
+    /// <response code="404">No inquiries found for the agency</response>
+    [HttpGet("agency/{agencyId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetByAgency(Guid agencyId)
+    {
+        var result = await _queryService.HandleByAgency(new GetAllInquiriesByAgencyQuery(agencyId));
+        var resources = result.Select(InquiryResourceFromEntityAssembler.ToResourceFromEntity);
+        return resources.Any() ? Ok(resources) : NotFound($"No inquiries found for agency {agencyId}.");
+    }
 
     /// <summary>
     /// Creates a new inquiry about an experience.
