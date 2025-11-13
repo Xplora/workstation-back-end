@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore; 
 using TripMatch.Xplore.Platform.Inquiry.Domain.Models.Commands;
 using TripMatch.Xplore.Platform.Inquiry.Domain.Models.Entities;
 using TripMatch.Xplore.Platform.Inquiry.Domain.Repository;
@@ -15,6 +15,7 @@ public class ResponseCommandService : IResponseCommandService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateResponseCommand> _validator;
     private readonly AppDbContext _context;
+    
     public ResponseCommandService(IResponseRepository repo, IUnitOfWork unit, IValidator<CreateResponseCommand> val,AppDbContext context)
     {
         _repository = repo;
@@ -45,9 +46,10 @@ public class ResponseCommandService : IResponseCommandService
             IsActive = true,
             Inquiry = inquiry
         };
-        
-        await _context.Set<Domain.Models.Entities.Response>().AddAsync(response);
-        await _context.SaveChangesAsync();
+        inquiry.Response = response;
+        await _repository.AddAsync(response);
+        await _unitOfWork.CompleteAsync(); 
+        _context.Entry(inquiry).State = EntityState.Detached;
 
         return response;
     }
