@@ -108,16 +108,14 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // CORS Policy
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var MyAllowSpecificOrigins = "AllowAllPolicy";
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("https://trip-match-2025.web.app", 
-                    "http://localhost:5173",          
-                    "http://localhost:8080")
+            policy.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
