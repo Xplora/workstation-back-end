@@ -17,7 +17,7 @@ El backend se divide en **Bounded Contexts** para modularizar la lógica de nego
 * **Inquiry:** Sistema de consultas entre turistas y agencias.
 * **Reviews:** Gestión de reseñas y valoraciones.
 
-## 🛠️ Stack Tecnológico
+##  Stack Tecnológico
 
 * **Framework:** .NET 7 / 8 (Web API)
 * **Base de Datos:** MySQL (con Entity Framework Core)
